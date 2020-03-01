@@ -25,7 +25,11 @@ class UserController extends ControllerAbstract
      *          "name": "José de Arimateia",
      *          "cpf": "29420039578",
      *          "email": "email@example.com",
-     *          "password": "secret"
+     *          "password": "secret",
+     *          "phone": "+5567998437764",
+     *          "gender": "M",
+     *          "birth": "1981-01-01",
+     *          "photo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwI....",
      *      }
      *     }
      *
@@ -43,6 +47,8 @@ class UserController extends ControllerAbstract
     {
         try {
             $user = $this->userService->create($request->get('user'));
+
+            event(new Registered($user));
 
             $this->response = [
                 'message' => __('message.user.created_successfully'),

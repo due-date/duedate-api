@@ -6,6 +6,7 @@ namespace App\Domain\Services;
 use App\Domain\Models\User;
 use App\Domain\Repositories\UserRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Fluent;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -23,8 +24,13 @@ class UserService implements ServiceInterface
 
     public function create(array $attributes): User
     {
+        $data = new Fluent($attributes);
+
+        $file = uploadFile(['content' => $data->photo]);
+
         $attributes['password']          = bcrypt($attributes['password']);
         $attributes['email_verified_at'] = Carbon::create();
+        $attributes['photo']             = $file['path'];
 
         return $this->repository->create($attributes);
     }

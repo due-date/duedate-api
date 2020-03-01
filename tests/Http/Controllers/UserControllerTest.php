@@ -4,7 +4,11 @@ namespace Tests\Http\Controllers;
 
 use App\Domain\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use JD\Cloudder\CloudinaryWrapper;
+use JD\Cloudder\Facades\Cloudder;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Fixtures\LogoFixture;
+use Tests\Fixtures\PhotoFixture;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -18,11 +22,18 @@ class UserControllerTest extends TestCase
     {
         $user = factory(User::class)->make();
 
+        $cloudinaryWrapper = \Mockery::mock(CloudinaryWrapper::class);
+        $cloudinaryWrapper->shouldReceive('getResult')->once()->andReturn(['url' => 'http://url.com.br/path_one/path_two/image_name.png']);
+        $cloudinaryWrapper->shouldReceive('getPublicId')->once()->andReturn('image_name');
+
+        Cloudder::shouldReceive('upload')->once()->with( PhotoFixture::photo(), ['folder' => 'due-date'], [])->andReturn($cloudinaryWrapper);
+
+
         $response = $this->call('POST', '/users', ['user' => $user->toArray()]);
 
         $response->assertStatus(Response::HTTP_OK);
         $content = json_decode($response->getContent());
-        $this->assertEquals($content->message, 'Usuário cadastrado com sucesso !!!');
+        $this->assertEquals($content->message, 'User created successfully');
     }
 
     /**
@@ -36,7 +47,7 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $content = json_decode($response->getContent());
-        $this->assertEquals($content->message, 'Usuário alterado com sucesso !!!');
+        $this->assertEquals($content->message, 'User created successfully');
     }
 
     /**

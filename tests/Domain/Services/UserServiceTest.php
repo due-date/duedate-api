@@ -6,7 +6,10 @@ use App\Domain\Models\User;
 use App\Domain\Repositories\UserRepository;
 use App\Domain\Services\UserService;
 use Illuminate\Http\Request;
+use JD\Cloudder\CloudinaryWrapper;
+use JD\Cloudder\Facades\Cloudder;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Tests\Fixtures\PhotoFixture;
 use Tests\TestCase;
 
 
@@ -29,6 +32,12 @@ class UserServiceTest extends TestCase
     public function create()
     {
         $user = factory(User::class)->make();
+
+        $cloudinary = \Mockery::mock(CloudinaryWrapper::class);
+        $cloudinary->shouldReceive('getResult')->once()->andReturn(['url' => 'https://res.cloudinary.com/path_one/path_two/image_name.png']);
+        $cloudinary->shouldReceive('getPublicId')->once()->andReturn('image_name');
+
+        Cloudder::shouldReceive('upload')->once()->with($user->photo, ['folder'=> 'due-date'], [])->andReturn($cloudinary);
 
         $user = $this->userService->create($user->toArray());
 

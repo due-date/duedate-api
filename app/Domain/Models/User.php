@@ -27,18 +27,21 @@ class User extends ModelAbstract implements
 {
     use Notifiable, Authenticatable, Authorizable, CanResetPassword, MustVerifyEmailTrait;
 
-    protected $hidden = [
-        'remember_token',
-    ];
+    protected $hidden = ['remember_token',];
+
+    protected $dates = ['birth' => 'Y-m-d'];
 
     protected $table = 'users';
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $casts = ['email_verified_at' => 'datetime'];
 
     protected $fillable = [
         'name',
+        'cpf',
+        'phone',
+        'gender',
+        'birth',
+        'photo',
         'password',
         'active',
         'email',
