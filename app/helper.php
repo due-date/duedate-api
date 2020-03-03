@@ -14,8 +14,8 @@ if (!function_exists('uploadFile')) {
         }
 
         if (preg_match('/^data:(\w+)\/(\w+);base64,/', $data->content)) {
-
-            $response = Cloudder::upload($data->content, ['folder' => 'due-date'], $tags);
+            $publicId = time();
+            $response = Cloudder::upload($data->content, 'due-date/customers/' . $publicId, $tags);
             $path     = parse_url($response->getResult()['url'])['path'];
 
             return [

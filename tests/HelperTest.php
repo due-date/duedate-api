@@ -21,7 +21,7 @@ class HelperTest extends TestCase
 
         $content = PhotoFixture::photo();
 
-        Cloudder::shouldReceive('upload')->once()->with($content, ['folder' => 'due-date'], [])->andReturn($cloudinaryWrapper);
+        Cloudder::shouldReceive('upload')->once()->andReturn($cloudinaryWrapper);
 
         $file = uploadFile(['content' => $content]);
 

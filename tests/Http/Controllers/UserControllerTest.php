@@ -26,7 +26,7 @@ class UserControllerTest extends TestCase
         $cloudinaryWrapper->shouldReceive('getResult')->once()->andReturn(['url' => 'http://url.com.br/path_one/path_two/image_name.png']);
         $cloudinaryWrapper->shouldReceive('getPublicId')->once()->andReturn('image_name');
 
-        Cloudder::shouldReceive('upload')->once()->with( PhotoFixture::photo(), ['folder' => 'due-date'], [])->andReturn($cloudinaryWrapper);
+        Cloudder::shouldReceive('upload')->once()->andReturn($cloudinaryWrapper);
 
 
         $response = $this->call('POST', '/users', ['user' => $user->toArray()]);

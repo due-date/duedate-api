@@ -37,7 +37,7 @@ class UserServiceTest extends TestCase
         $cloudinary->shouldReceive('getResult')->once()->andReturn(['url' => 'https://res.cloudinary.com/path_one/path_two/image_name.png']);
         $cloudinary->shouldReceive('getPublicId')->once()->andReturn('image_name');
 
-        Cloudder::shouldReceive('upload')->once()->with($user->photo, ['folder'=> 'due-date'], [])->andReturn($cloudinary);
+        Cloudder::shouldReceive('upload')->once()->andReturn($cloudinary);
 
         $user = $this->userService->create($user->toArray());
 
